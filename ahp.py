@@ -1,31 +1,7 @@
-"""
-Метод анализа иерархий (МАИ) для расчета весов критериев.
-Автор: Участник 3
-"""
-
 import numpy as np
 from typing import List, Dict, Any, Tuple
 
-
 def calculate_ahp_weights(matrix: List[List[float]]) -> Dict[str, Any]:
-    """
-    Вычисляет веса критериев методом анализа иерархий.
-    
-    Аргументы:
-        matrix: квадратная матрица парных сравнений (список списков)
-                Например, для 3 критериев:
-                [[1, 3, 5],
-                 [1/3, 1, 2],
-                 [1/5, 1/2, 1]]
-    
-    Возвращает:
-        dict с полями:
-        - weights: список весов (сумма = 1)
-        - lambda_max: максимальное собственное число
-        - ci: индекс согласованности
-        - cr: отношение согласованности
-        - is_consistent: True если CR < 0.1
-    """
     
     n = len(matrix)
     matrix_np = np.array(matrix, dtype=float)
@@ -64,20 +40,7 @@ def build_matrix_from_comparisons(
     criteria_names: List[str],
     comparisons: List[Dict[str, Any]]
 ) -> Tuple[List[List[float]], List[Tuple[str, str]]]:
-    """
-    Превращает ответы пользователя в матрицу парных сравнений.
-    
-    Аргументы:
-        criteria_names: список названий критериев, например ["доброта", "доход", "внешность"]
-        comparisons: список сравнений, каждое сравнение - словарь вида:
-                     {"criterion_a": "доброта", "criterion_b": "доход", "value": 3}
-                     value = 1 (равны), 3 (A важнее B в 3 раза), 1/3 (B важнее A)
-    
-    Возвращает:
-        matrix: квадратная матрица сравнений
-        missing_pairs: список пар, для которых не было сравнений (если есть)
-    """
-    
+   
     n = len(criteria_names)
     index_map = {name: i for i, name in enumerate(criteria_names)}
     
@@ -106,7 +69,6 @@ def build_matrix_from_comparisons(
     for i, j in all_pairs:
         if (i, j) not in recorded_pairs:
             missing_pairs.append((criteria_names[i], criteria_names[j]))
-            # Заполняем пропущенные единицами (равная важность)
             matrix[i][j] = 1.0
             matrix[j][i] = 1.0
     
@@ -114,12 +76,7 @@ def build_matrix_from_comparisons(
 
 
 def suggest_improvements(matrix: List[List[float]], criteria_names: List[str]) -> List[Dict[str, Any]]:
-    """
-    Анализирует матрицу и предлагает, какие сравнения исправить для улучшения согласованности.
-    
-    Возвращает список проблемных пар с предложениями.
-    """
-    
+
     n = len(matrix)
     result = calculate_ahp_weights(matrix)
     
