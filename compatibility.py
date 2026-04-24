@@ -1,18 +1,8 @@
-"""
-Алгоритм оценки совместимости между двумя пользователями.
-Автор: Участник 3
-"""
-
 from typing import Dict, List, Any, Union
 import numpy as np
 
 
 def compute_similarity_numeric(value_a: float, value_b: float, min_val: float = 1, max_val: float = 10) -> float:
-    """
-    Вычисляет сходство для числовых критериев (возраст, доход, оценка качеств).
-    
-    Формула: 1 - (нормированная разница)
-    """
     if value_a is None or value_b is None:
         return 0.0
     
@@ -23,9 +13,6 @@ def compute_similarity_numeric(value_a: float, value_b: float, min_val: float = 
 
 
 def compute_similarity_categorical(value_a: Any, value_b: Any) -> float:
-    """
-    Вычисляет сходство для категориальных критериев (пол, город, вероисповедание).
-    """
     if value_a is None or value_b is None:
         return 0.0
     return 1.0 if value_a == value_b else 0.0
@@ -56,21 +43,6 @@ def compute_compatibility(
     profile_b: Dict[str, Any],
     criteria_weights: Dict[str, float]
 ) -> Dict[str, Any]:
-    """
-    Вычисляет совместимость между пользователем A и кандидатом B.
-    
-    Аргументы:
-        profile_a: профиль пользователя A (его качества и предпочтения)
-        profile_b: профиль кандидата B
-        criteria_weights: веса критериев от пользователя A
-    
-    Возвращает:
-        dict с полями:
-        - compatibility_score: итоговый балл (0-100)
-        - breakdown: список с детализацией по каждому критерию
-        - summary: краткая сводка (лучшие и худшие критерии)
-    """
-    
     total_score = 0.0
     breakdown = []
     
@@ -137,13 +109,7 @@ def compute_batch_compatibility(
     candidates_profiles: List[Dict[str, Any]],
     criteria_weights: Dict[str, float]
 ) -> List[Dict[str, Any]]:
-    """
-    Вычисляет совместимость пользователя с множеством кандидатов.
-    Используется для массового расчета и оптимизации.
-    
-    Возвращает список кандидатов с их баллами совместимости, отсортированный по убыванию.
-    """
-    
+
     results = []
     
     for candidate in candidates_profiles:
